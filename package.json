@@ -1,0 +1,78 @@
+{
+  "name": "extension-template",
+  "version": "0.1.9",
+  "description": "",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot --disable-host-check --port 8080",
+    "start-no-hot": "webpack-dev-server --no-inline --no-hot --port 8080",
+    "build": "export BABEL_ENV=build && tsc --noEmit && webpack --mode=production --config webpack.prod.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "@looker/components": "0.7.31",
+    "@looker/extension-sdk": "^0.7.2",
+    "@looker/extension-sdk-react": "^0.5.1",
+    "@looker/sdk": "^0.3.0-beta.1",
+    "@types/node": "^14.0.3",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/readable-stream": "^2.3.6",
+    "@types/styled-components": "5.1.0",
+    "@types/styled-system": "^5.1.9",
+    "babel-loader": "^8.1.0",
+    "lodash": "^4.17.15",
+    "minimist": "^1.2.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.12.21",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.1.0",
+    "styled-system": "^5.1.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
+    "@babel/plugin-transform-react-jsx": "^7.9.4",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "@babel/runtime": "^7.9.6",
+    "@types/lodash": "^4.14.151",
+    "babel-preset-nano-react-app": "^0.1.0",
+    "css-loader": "^3.5.3",
+    "style-loader": "^1.2.1",
+    "typescript": "^3.9.2"
+  },
+  "babel": {
+    "presets": [
+      "nano-react-app"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          "pragmaFrag": "React.Fragment"
+        }
+      ]
+    ]
+  }
+}
