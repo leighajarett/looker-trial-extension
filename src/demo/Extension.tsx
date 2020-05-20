@@ -23,12 +23,13 @@
  */
 
 import React from 'react'
-import {Banner, Box, Heading, Paragraph, Popover, PopoverContent, Text} from '@looker/components'
+import {Banner, Box, Heading, Paragraph, Popover, PopoverContent, Text, Button, Icon, ButtonOutline, Space} from '@looker/components'
 import {ExtensionContext} from '@looker/extension-sdk-react'
 import {ILook} from '@looker/sdk'
 import {Switch, Route, RouteComponentProps, withRouter, MemoryRouter} from 'react-router-dom'
 import { hot } from "react-hot-loader/root"
 import Experience from "./Experience"
+import styled from 'styled-components';
 
 interface ExtensionState {
   // looks?: ILook[]
@@ -39,6 +40,7 @@ interface ExtensionState {
   loadingLooks: boolean
   errorMessage?: string
 }
+
 
 class ExtensionInternal extends React.Component<RouteComponentProps, ExtensionState> {
   static contextType = ExtensionContext
@@ -59,14 +61,86 @@ class ExtensionInternal extends React.Component<RouteComponentProps, ExtensionSt
       <>
         {this.state.errorMessage && <Banner intent='error'>{this.state.errorMessage}</Banner>}
         <Box m='large' marginTop='80'>
-          <Box m='medium' width={'40%'} marginLeft='75'>
-            <Heading fontWeight='semiBold' marginBottom='10'>Welcome to the Looker Sandbox Trial Instance!</Heading>
-            <Paragraph fontSize='medium'> We've created this instance to help you understand how Looker may help you use data to drive real business value. 
+          <Box  display="flex" flexWrap='wrap'>
+          <Box m='medium' width={'35%'} marginLeft='100' marginRight='100'>
+            <Heading fontWeight='semiBold' marginBottom='10'>Welcome to your Looker Trial!</Heading>
+            <Paragraph fontSize='medium'> We've created this instance so you can better understand how Looker will help you use data to drive real business value. 
               Here, you will be able to walk through a series of guided data experiences that we've developed based on common use cases we see from our customers. 
             </Paragraph>
           </Box>
-          <Box>
-          <Popover
+          <Box width="40%" marginTop="20" marginBottom="10" marginRight="10%" alignItems="center">
+            <Banner intent="info" fontSize="xsmall"> Click on a button to see what assets are in each section, then jump into a use case to get started!
+            </Banner>
+            <Space>
+            <Box display="flex" flexWrap='wrap' paddingLeft="10">
+              <Popover
+              content={
+              <PopoverContent p="large" width="360px">
+                <Text fontSize="small" textAlign="center">Start your Looker journey by opening both a Dashboard and the corresponding Dashboard Guide, which will walk you through step-by-step instructions for getting started using dashboards in Looker.</Text>
+              </PopoverContent>}>
+                  {(onClick, ref, className) => (
+                      <ButtonOutline width="100%" color="neutral" iconBefore="Visualization" marginBottom="10" aria-haspopup="true" onClick={onClick} ref={ref} className={className}>Go to Dashboards</ButtonOutline>)}
+            </Popover>            
+          </Box>
+            <Box>
+            <Popover
+              content={
+              <PopoverContent p="large" width="360px">
+                  <Paragraph fontSize="small" textAlign="center">Ready to learn how to ask new question of the data? Jump into an Explore and follow along with the Q & A Packet to get familiar with exploring data in Looker.</Paragraph>
+              </PopoverContent>}>
+                  {(onClick, ref, className) => (
+                      <ButtonOutline width="100%" color="neutral" iconBefore="Explore" marginBottom="10" aria-haspopup="true" onClick={onClick} ref={ref} className={className}>Start Exploring</ButtonOutline>)}
+              </Popover>   
+              </Box>
+            <Box>
+            <Popover
+              content={
+              <PopoverContent p="large" width="360px">
+                <Paragraph fontSize="small" textAlign="center">Check out the additional resources menu for links to supporting material such as customer stories or recorded videos specific to the industry or use case</Paragraph>
+              </PopoverContent>}>
+                  {(onClick, ref, className) => (
+                      <ButtonOutline width="100%" color="neutral" iconBefore="Public" marginBottom="10" aria-haspopup="true" onClick={onClick} ref={ref} className={className}>Additional Resources</ButtonOutline>)}
+              </Popover>  
+            </Box>
+            </Space>
+          </Box>
+          </Box>
+          {/* <Heading marginTop='50'> Click on an experience below to get started 🤩</Heading> */}
+          <Box m='large' display='flex' flexWrap='wrap'>
+            <Experience board_id={26}/>
+            <Experience board_id={25}/>
+            <Experience board_id={26}/>
+          </Box>
+        </Box>
+
+
+
+      </>
+    )
+  }
+}
+
+export const Extension = hot(withRouter(ExtensionInternal))
+
+//   const dashboard_icon = (
+    //     <Icon name="Visualization" color="palette.purple300" size={24} marginRight="small" />
+    //   )
+    //   const explore_icon = (
+    //     <Icon name="Explore" color="palette.purple300" size={24} marginRight="small" />
+    //   )
+    //   const ditl_icon = (
+    //     <Icon name="ExploreOutline" color="palette.purple300" size={24} marginRight="small" />
+    //   )
+    //   const ex_packet_icon = (
+    //     <Icon name="FormatListNumbered" color="palette.purple300" size={24} marginRight="small" />
+    //   )
+    //   const customer_stories_icon = (
+    //     <Icon name="Account" color="palette.purple300" size={24} marginRight="small" />
+    //   )
+    //   const see_recording_icon = (
+    //     <Icon name="Public" color="palette.purple300" size={20} marginRight="small" />
+    //   )
+{/* <Popover
             content={
               <PopoverContent p="large" width="360px">
                 <Heading>Wildebeest</Heading>
@@ -96,21 +170,4 @@ class ExtensionInternal extends React.Component<RouteComponentProps, ExtensionSt
                 A Wikipedia article about Wildebeests
               </Button>
             )}
-          </Popover>
-          </Box>
-          {/* <Heading marginTop='50'> Click on an experience below to get started 🤩</Heading> */}
-          <Box m='large' display='flex' flexWrap='wrap'>
-            <Experience board_id={26}/>
-            <Experience board_id={25}/>
-            <Experience board_id={26}/>
-          </Box>
-        </Box>
-
-
-
-      </>
-    )
-  }
-}
-
-export const Extension = hot(withRouter(ExtensionInternal))
+          </Popover> */}
