@@ -22,41 +22,78 @@
  * THE SOFTWARE.
  */
 
-import React from 'react'
+import React, { useContext, Component } from "react"
 import {Banner, Box, Heading, Paragraph, Popover, PopoverContent, Text, Button, Icon, ButtonOutline, Space} from '@looker/components'
-import {ExtensionContext} from '@looker/extension-sdk-react'
+import {
+  ExtensionContext,
+  ExtensionContextData,
+  getCore31SDK,
+  getCore40SDK
+} from "@looker/extension-sdk-react"
 import {ILook} from '@looker/sdk'
 import {Switch, Route, RouteComponentProps, withRouter, MemoryRouter} from 'react-router-dom'
 import { hot } from "react-hot-loader/root"
 import Experience from "./Experience"
 import styled from 'styled-components';
+import { promises } from 'fs'
+import { List } from 'lodash'
 
 interface ExtensionState {
-  // looks?: ILook[]
-  // currentLook?: ILook
-  // selectedLookId?: number
-  // queryResult?: any
-  // runningQuery: boolean
-  loadingLooks: boolean
+  loadingBoards: boolean
   errorMessage?: string
+  boardIds: Array<string>
 }
 
 
-class ExtensionInternal extends React.Component<RouteComponentProps, ExtensionState> {
-  static contextType = ExtensionContext
-  context!: React.ContextType<typeof ExtensionContext>
+class ExtensionInternal extends Component<RouteComponentProps, ExtensionState> {
+  static contextType = ExtensionContext;
+  context!: React.ContextType<typeof ExtensionContext>;
+  // static extensionContext = useContext<ExtensionContextData>(ExtensionContext);
+  //sdk = this.context.core31SDK;
 
   constructor(props: RouteComponentProps) {
     super(props)
     this.state = {
-      loadingLooks: false
+      loadingBoards: true,
+      boardIds: []
     }
   }
+
+  UpdateBoards(look_id: any) {
+    console.log('Running look')
+    console.log(look_id)
+    this.context.core31SDK.run_look({'look_id':look_id, 'result_format':'json'}).then(
+        (result: any) => {
+            var new_board_ids = [];
+            if (result.ok) {
+                for(var i = 0; i < result.value.length; i++){ 
+                    new_board_ids.push(result.value[i]['demo_use_cases.trial_board']);
+                }
+              } 
+            else {
+                console.error("Something went wrong:", result.error)
+            }
+            this.setState({boardIds : new_board_ids})
+        }
+      )
+    };
+
+    componentWillMount() {
+      this.UpdateBoards(79);
+      // this.setState({boardIds : boards});
+  }
+
 
   render() {
     if (this.context.initializeError) {
       return <Banner intent='error'>{this.context.initializeError}</Banner>
     }
+    for (var i = 0; i < this.state.boardIds.length; i++) {
+      var elements=[];
+      var string_length = 'https://trial.looker.com/boards/'.length;
+      var b_id = parseInt(this.state.boardIds[i].substr(string_length),10);
+      //console.log(b_id)
+      elements.push(<Experience key={i} board_id={b_id}/>);}
     return (
       <>
         {this.state.errorMessage && <Banner intent='error'>{this.state.errorMessage}</Banner>}
@@ -107,9 +144,7 @@ class ExtensionInternal extends React.Component<RouteComponentProps, ExtensionSt
           </Box>
           {/* <Heading marginTop='50'> Click on an experience below to get started 🤩</Heading> */}
           <Box m='large' display='flex' flexWrap='wrap'>
-            <Experience board_id={26}/>
-            <Experience board_id={25}/>
-            <Experience board_id={26}/>
+          {elements}
           </Box>
         </Box>
 
