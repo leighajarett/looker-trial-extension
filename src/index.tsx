@@ -24,10 +24,10 @@
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import {Extension} from './demo/Extension'
 import {ExtensionProvider} from '@looker/extension-sdk-react'
 import {GlobalStyle, theme, Spinner, Flex} from '@looker/components'
 import {ThemeProvider} from 'styled-components'
+import Extension from "./Extension"
 
 window.addEventListener('DOMContentLoaded', async (event) => {
   const root = document.createElement('div')
@@ -45,10 +45,10 @@ window.addEventListener('DOMContentLoaded', async (event) => {
       <ThemeProvider theme={theme}>
         <>
           <GlobalStyle />
-          <Extension />
+          <Extension/>
         </>
       </ThemeProvider>
     </ExtensionProvider>,
     root
   )
-})
+}) 
