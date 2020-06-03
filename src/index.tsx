@@ -28,6 +28,7 @@ import {ExtensionProvider} from '@looker/extension-sdk-react'
 import {GlobalStyle, theme, Spinner, Flex} from '@looker/components'
 import {ThemeProvider} from 'styled-components'
 import Extension from "./Extension"
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 window.addEventListener('DOMContentLoaded', async (event) => {
   const root = document.createElement('div')
