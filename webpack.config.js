@@ -52,13 +52,13 @@ module.exports = {
         include: /node_modules/,
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" }
+          'style-loader',
+          'css-loader'
         ]
       }
-    ],
+    ]
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
