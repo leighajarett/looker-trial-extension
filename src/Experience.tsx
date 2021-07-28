@@ -31,12 +31,14 @@ export default function Experience(props: any) {
   const board = (board_metadata: { [key: string]: any }) => {
     sdk.homepage(props.board_id).then(
       function(result: any){
+        console.log(result)
         if (result.ok) {
           var new_sections = []
           for(var i = 0; i < result.value.homepage_sections.length; i++){
             var id = result.value.section_order.indexOf(result.value.homepage_sections[i].id);
             //must have an explore link and a dashboard to start with or else it doesnt show up
-            if(result.value.homepage_sections[i].homepage_items.length > 0 && (board_metadata[id+1].explore_start !== undefined && board_metadata[id+1].explore_start !== null)){
+            console.log("metadata in experience: ", id+1)
+            if(board_metadata[id+1] && result.value.homepage_sections[i].homepage_items.length > 0 && (board_metadata[id+1].explore_start !== undefined && board_metadata[id+1].explore_start !== null)){
               //console.log(result.value.homepage_sections[i].title)
               new_sections.push({
                 board_title: result.value.title,
@@ -83,7 +85,11 @@ export default function Experience(props: any) {
     }
   }, [props.board_id, props.board_metadata]);
 
-  if(title !== undefined &&  title !== ''){
+  if(title !== undefined &&  title !== '' && sections.length > 0){
+    sections.sort(function(a:any, b:any){
+      return a.id - b.id;
+    });
+
     return (
       <Box
       m='medium'

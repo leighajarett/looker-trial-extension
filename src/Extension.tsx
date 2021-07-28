@@ -46,15 +46,17 @@ export default function Extension(){
   var inital_meta: { [key: string]: any } = {};
   var [metadata, setMetaData] = React.useState(inital_meta)
   var [isDeveloper, setDeveloper] = React.useState(false as boolean)
+  var [instance, setInstance] = React.useState('')
+  
 
-  const updateBoards = () => {
+  const updateBoards = (look_id: number, dimension_name: string) => {
     // update the state with the list of boards from our demo board list
-    sdk.run_look({'look_id':79, 'result_format':'json', 'cache':true}).then(
+    sdk.run_look({'look_id':look_id, 'result_format':'json', 'cache':true}).then(
       (result: any) => {
         var new_board_ids = [];
         if (result.ok) {
           for(var i = 0; i < result.value.length; i++){ 
-              var b_id = parseInt(result.value[i]['demo_use_cases.trial_board_id']);
+              var b_id = parseInt(result.value[i][dimension_name]);
               new_board_ids.push(b_id);
           }
           setBoards(new_board_ids);
@@ -63,9 +65,9 @@ export default function Extension(){
     )
   };
 
-  const updateMetaData = () => {
+  const updateMetaData = (look_id: number, dimension_name: string) => {
     // update the state with the list of boards from our demo board list
-    sdk.run_look({'look_id':77, 'result_format':'json', 'cache':true}).then(
+    sdk.run_look({'look_id':look_id, 'result_format':'json', 'cache':true}).then(
       (result: any) => {
         if (result.ok) {
           var new_board: {[b_id: string]: any} = {};
@@ -74,7 +76,7 @@ export default function Extension(){
             var b_id: string;
             var s_id: string;
 
-            b_id = result.value[i]['demo_use_cases.trial_board_id'];
+            b_id = result.value[i][dimension_name];
             s_id = result.value[i]['demo_use_cases.section_id'];
             if (!new_board[b_id]){new_board[b_id] = {}};
             new_board[b_id][s_id] = {
@@ -85,11 +87,13 @@ export default function Extension(){
               dashboard_start: result.value[i]['demo_use_cases.dashboard_start_slug'], 
               recorded_demo: result.value[i]['demo_use_cases.embed_demo_url'], 
               section_id: result.value[i]['demo_use_cases.section_id'], 
-              trial_board: result.value[i]['demo_use_cases.trial_board'],
+              trial_board: result.value[i][dimension_name],
               vertical: result.value[i]['demo_use_cases.vertical']
           };
           }
           setMetaData(new_board);
+          console.log("metadata: ")
+          console.log(new_board)
         } 
         else {
           console.error("Something went wrong with getting the metadata", result.error)
@@ -113,11 +117,40 @@ export default function Extension(){
     )
   };
 
+  const getInstance = () => {
+    sdk.versions().then(
+      function(result: any){
+        if (result.ok) {
+          console.log(result)
+          if (result.value.api_server_url == 'https://trial.looker.com:19999'){
+            setInstance('trial')
+          }
+          else{
+            setInstance('partnerdemo')
+          }
+        }
+      }
+    )
+  }
+
   useEffect(() => {
-      updateBoards();
-      updateMetaData();
-      getModels();
-  }, []);
+    getInstance()
+  },[])
+
+  useEffect(() => {
+      if(instance=='trial'){
+        console.log('trial')
+        updateBoards(79,'demo_use_cases.trial_board_id');
+        updateMetaData(77,'demo_use_cases.trial_board_id');
+        getModels();
+      }
+      else if(instance=='partnerdemo'){
+        console.log('trial')
+        updateBoards(13,'demo_use_cases.partnerdemo_board_id');
+        updateMetaData(12,'demo_use_cases.partnerdemo_board_id');
+        getModels();
+      }
+  }, [instance]);
 
   return (
   <>
