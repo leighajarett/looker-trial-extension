@@ -1,9 +1,9 @@
-// const ACADEMY_SERVER = 'https://datadriven.university'
 import {useEffect, useState} from "react";
 
-const ACADEMY_SERVER = 'https://localhost:8443'
+const ACADEMY_SERVER = 'https://staging-datadriven.university'
+// const ACADEMY_SERVER = 'https://localhost:8443'
 
-const usePrivacyConsent = () => {
+export const usePrivacyConsent = () => {
   const [isConsented, setConsented] = useState(false)
 
   const doUserStatusRequest = () => {
@@ -23,6 +23,7 @@ const usePrivacyConsent = () => {
       const json = await response.json()
 
       if (json && typeof json.accepted_privacy_policy !== 'undefined' && json.accepted_privacy_policy !== 'declined') {
+        console.log('teststst')
         setConsented(true)
       }
     }
@@ -32,5 +33,3 @@ const usePrivacyConsent = () => {
 
   return isConsented
 }
-
-export default usePrivacyConsent

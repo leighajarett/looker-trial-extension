@@ -16,18 +16,31 @@ import {
 } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import {useLookerRedirect} from './hooks/useLookerRedirect'
-import {useExtensionDetector} from './ExtensionDetector'
+import {useExtensionDetector} from './hooks/useExtensionDetector'
+import {usePrivacyConsent} from './hooks/usePrivacyConsent'
+import {useAutoLogin} from './hooks/useAutoLogin'
+import {useWizard} from './index'
 
 type StepsProps = {
   close: () => void
+  isOpen: boolean,
 }
 
-const Steps: React.FC<StepsProps> = ({ children, close }) => {
+const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
   const [current, setCurrent] = React.useState(0)
   const [checked, setChecked] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
 
   const detected = useExtensionDetector()
+  const isConsented = usePrivacyConsent()
   const redirect = useLookerRedirect()
+  const autoLogin = useAutoLogin()
+  const wizard = useWizard()
+
+  React.useEffect(() => {
+    isConsented && setChecked(true)
+    isConsented && setCurrent(detected ? 2 : 1)
+  }, [isConsented])
 
   const handleRedirect = () => {
     redirect('https://datadriven.university/privacy', 'blank')
@@ -38,6 +51,28 @@ const Steps: React.FC<StepsProps> = ({ children, close }) => {
         'https://chrome.google.com/webstore/detail/data-driven-university/ckfldhejolipdmhhmofaandhaimbcbdn',
         '_blank'
     )
+  }
+
+  const next = () => {
+    if(current === 0 && !isConsented){
+      setLoading(true)
+      autoLogin()
+          .then(() => {
+            setLoading(false)
+            setCurrent(current + 1)
+            wizard.setSuccessLogin(true)
+          })
+          .catch(e => {
+            setLoading(false)
+            console.error(e)
+          })
+    } else {
+      setCurrent(current + 1)
+    }
+  }
+
+  const prev = () => {
+    setCurrent(current - 1)
   }
 
   const steps = [
@@ -51,7 +86,7 @@ const Steps: React.FC<StepsProps> = ({ children, close }) => {
           anytime be returning to this site.</Paragraph>
         <Paragraph>Check our <ButtonTransparent onClick={handleRedirect}>Privacy Policy</ButtonTransparent> to see what data we are collecting.</Paragraph>
         <Flex marginTop="25px">
-          <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
+          <Checkbox disabled={isConsented} checked={checked} onChange={() => setChecked(!checked)} />
           <Box marginLeft="5px">I agree to Privacy Policy</Box>
         </Flex>
       </Box>,
@@ -71,15 +106,7 @@ const Steps: React.FC<StepsProps> = ({ children, close }) => {
     },
   ]
 
-  const next = () => {
-    setCurrent(current + 1)
-  }
-
-  const prev = () => {
-    setCurrent(current - 1)
-  }
-
-  const nextButtonDisabled = (current === 0 && !checked) || (current === 1 && !detected)
+  const nextButtonDisabled = (current === 0 && !checked) || (current === 1 && !detected) || loading
 
   return (
     <Grid columns={1}>

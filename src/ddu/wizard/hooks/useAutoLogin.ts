@@ -1,10 +1,10 @@
 
 import { getCore40SDK } from '@looker/extension-sdk-react'
 
-// const ACADEMY_SERVER = 'https://datadriven.university'
-const ACADEMY_SERVER = 'https://localhost:8443'
+const ACADEMY_SERVER = 'https://staging-datadriven.university'
+// const ACADEMY_SERVER = 'https://localhost:8443'
 
-const useAutoLogin = () => {
+export const useAutoLogin = () => {
   const signIn = (email: string, firstName: string, lastName: string) => {
     return fetch(`${ACADEMY_SERVER}/users/stats`, {
       method: 'POST',
@@ -34,5 +34,3 @@ const useAutoLogin = () => {
     }
   }
 }
-
-export default useAutoLogin

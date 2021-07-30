@@ -26,7 +26,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import {ExtensionProvider} from '@looker/extension-sdk-react'
 import {Spinner, Flex, ComponentsProvider} from '@looker/components'
-import DDUWizardProvider from './DDUWizard'
+import DDUWizardProvider from './ddu/wizard'
 import Extension from "./Extension"
 
 import 'bootstrap/dist/css/bootstrap.min.css';

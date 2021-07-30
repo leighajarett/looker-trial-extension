@@ -47,16 +47,6 @@ const useExtensionMessageSender = () => {
   )
 }
 
-const useTimer = (ms = 0) => {
-  const [isTimeout, setIsTimeout] = useState(false)
-
-  useEffect(() => {
-    setTimeout(() => setIsTimeout(true), ms)
-  }, [ms])
-
-  return isTimeout
-}
-
 const useExtensionNotifier = () => {
   const sendMessage = useExtensionMessageSender()
   useEffect(() => {
@@ -68,9 +58,8 @@ const useInstallationMessageReceiver = () => {
   const [isInstalled, setIsInstalled] = useState(false)
 
   useMessageListener('EXTENSION_INSTALLED', () => setIsInstalled(true))
-  const isTimeout = useTimer(3000)
 
-  return !isTimeout ? true : isInstalled
+  return isInstalled
 }
 
 export function useExtensionDetector() {

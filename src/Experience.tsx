@@ -9,6 +9,7 @@ import {
     getCore31SDK,
     getCore40SDK,
   } from "@looker/extension-sdk-react"
+import {useWizard} from "./ddu/wizard";
 
 //import { sdkError } from "@looker/sdk";
 // import './styles.css';
@@ -131,6 +132,7 @@ export default function Experience(props: any) {
 };
 
 export function Section(props:any) {
+      const wizard = useWizard()
       var dashboardList = []
       var dash_link_title = 'Start with the '.concat(props.dashboard_title,' Dashboard')
       var board_link_title = 'View all '.concat(props.vertical,' Dashboards')
@@ -153,7 +155,7 @@ export function Section(props:any) {
         <Space>
         <ExperienceButton buttonTitle={'Go to Dashboards'} buttonIcon={"Visualization"} menuItems={dashboardList}></ExperienceButton>
         <ExperienceButton buttonTitle={'Start Exploring'} buttonIcon={"Explore"} menuItems={experienceList}></ExperienceButton>
-        <ExperienceButton buttonTitle={'Walkthroughs'} buttonIcon={"Beaker"} menuItems={experienceList}></ExperienceButton>
+        <ExperienceButton locked={!wizard.detected || !wizard.consented} buttonTitle={'Walkthroughs'} buttonIcon={"Beaker"} menuItems={experienceList}></ExperienceButton>
         {/* {(props.recorded_demo || props.customer_story) ? <ExperienceButton buttonTitle={"Additional Resources"} buttonIcon={"Public"} menuItems={resourceList}></ExperienceButton>: <div></div>} */}
         </Space>
         </Box>
@@ -163,8 +165,13 @@ export function Section(props:any) {
 
 
 export function ExperienceButton(props:any){
+  const wizard = useWizard()
   //props.menuItems.forEach((item:any) => console.log(item.name, item.link))
   // <iframe src="https://docs.google.com/document/d/e/2PACX-1vRQ45rPpvA4Oudid68SzISQ7tjTvMDg6HsaVcKQSCVPdmjcSNdXsgKF68FEdp8EpnuxLg7MgwemMX2t/pub?embedded=true"></iframe>
+
+  if(props.locked) {
+      return <ButtonOutline color="neutral" onClick={() => wizard.open()}  size="small">{props.buttonTitle}</ButtonOutline>
+  }
 
   return(
     <Menu
