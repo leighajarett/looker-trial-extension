@@ -1,14 +1,16 @@
 import React,  { useContext, useEffect } from "react"
-import { Select, theme, Link, Icon, ActionList, ActionListItemColumn, ActionListItem, Menu, MenuDisclosure, MenuList, MenuItem, ButtonOutline, Space, ButtonItem} from "@looker/components";
+import { Select, theme, Link, Icon, Menu, MenuList, MenuItem, ButtonOutline, Space, ButtonItem} from "@looker/components";
 import styled, { ThemeProvider } from 'styled-components';
 import Modal from 'react-bootstrap/Modal';
-import {Banner, Box, Heading, Paragraph, Button} from '@looker/components';
+import {Box, Heading, Paragraph, Button} from '@looker/components';
 import {
     ExtensionContext,
     ExtensionContextData,
     getCore31SDK,
     getCore40SDK,
   } from "@looker/extension-sdk-react"
+import {useWizard} from "./ddu/wizard";
+import { Explore, ChartArea, Beaker } from '@looker/icons'
 
 //import { sdkError } from "@looker/sdk";
 // import './styles.css';
@@ -131,6 +133,7 @@ export default function Experience(props: any) {
 };
 
 export function Section(props:any) {
+      const wizard = useWizard()
       var dashboardList = []
       var dash_link_title = 'Start with the '.concat(props.dashboard_title,' Dashboard')
       var board_link_title = 'View all '.concat(props.vertical,' Dashboards')
@@ -151,8 +154,9 @@ export function Section(props:any) {
         <Paragraph fontSize='xsmall' fontStyle='italic' marginTop='5' marginBottom='10'>{props.description}</Paragraph> 
         <Box marginBottom={20}>
         <Space>
-        <ExperienceButton buttonTitle={'Go to Dashboards'} buttonIcon={"Visualization"} menuItems={dashboardList}></ExperienceButton>
-        <ExperienceButton buttonTitle={'Start Exploring'} buttonIcon={"Explore"} menuItems={experienceList}></ExperienceButton>
+        <ExperienceButton buttonTitle={'Go to Dashboards'} buttonIcon={<ChartArea />} menuItems={dashboardList}></ExperienceButton>
+        <ExperienceButton buttonTitle={'Start Exploring'} buttonIcon={<Explore />} menuItems={experienceList}></ExperienceButton>
+        <ExperienceButton locked={!wizard.detected || !wizard.consented} buttonTitle={'Walkthroughs'} buttonIcon={<Beaker />} menuItems={experienceList}></ExperienceButton>
         {/* {(props.recorded_demo || props.customer_story) ? <ExperienceButton buttonTitle={"Additional Resources"} buttonIcon={"Public"} menuItems={resourceList}></ExperienceButton>: <div></div>} */}
         </Space>
         </Box>
@@ -162,23 +166,28 @@ export function Section(props:any) {
 
 
 export function ExperienceButton(props:any){
+  const wizard = useWizard()
   //props.menuItems.forEach((item:any) => console.log(item.name, item.link))
   // <iframe src="https://docs.google.com/document/d/e/2PACX-1vRQ45rPpvA4Oudid68SzISQ7tjTvMDg6HsaVcKQSCVPdmjcSNdXsgKF68FEdp8EpnuxLg7MgwemMX2t/pub?embedded=true"></iframe>
 
+  if(props.locked) {
+      return <ButtonOutline color="neutral" onClick={() => wizard.open()} iconBefore={props.buttonIcon} size="small">{props.buttonTitle}</ButtonOutline>
+  }
+
   return(
-    <Menu>
-      <MenuDisclosure>
-        <ButtonOutline color="neutral"  size="small" iconBefore={props.buttonIcon}>{props.buttonTitle}</ButtonOutline>
-      </MenuDisclosure>
-      <MenuList>
-        {
-          props.menuItems.map((item: any, i: number) => 
-            (
-            <ExperienceMenuButton key={i} name={item.name} link={item.link}></ExperienceMenuButton>
-            ))
-            // <MenuItem key={item.name} itemRole="button" onClick={() => sdk.openBrowserWindow(item.link,'_blank')}>{item.name}</MenuItem>)
+    <Menu
+        content={
+            <MenuList>
+                {props.menuItems.map((item: any, i: number) =>
+                        (
+                            <ExperienceMenuButton key={i} name={item.name} link={item.link}/>
+                        ))
+                    // <MenuItem key={item.name} itemRole="button" onClick={() => sdk.openBrowserWindow(item.link,'_blank')}>{item.name}</MenuItem>)
+                }
+            </MenuList>
         }
-      </MenuList>
+    >
+        <ButtonOutline iconBefore={props.buttonIcon} color="neutral"  size="small">{props.buttonTitle}</ButtonOutline>
     </Menu>
   )
 }
