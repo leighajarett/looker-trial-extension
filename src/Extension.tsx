@@ -23,7 +23,7 @@
  */
 
 import React, { useContext, Component, useEffect } from "react"
-import {Banner, Box, Heading, Paragraph, Popover, PopoverContent, Text, Button, Icon, ButtonOutline, Space, Menu, MenuDisclosure, MenuList, MenuItem} from '@looker/components'
+import {Icon, Banner, Box, Heading, Paragraph, Popover, PopoverContent, Text, Grid, ButtonOutline, Space, Menu, MenuDisclosure, MenuList, MenuItem, Card, CardContent, ButtonTransparent} from '@looker/components'
 import {
   ExtensionContext,
   ExtensionContextData,
@@ -42,6 +42,7 @@ import { promises } from 'fs'
 export default function Extension(){
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
   const sdk = extensionContext.core31SDK
+  const { extensionSDK } = extensionContext
   var [boardIds, setBoards] = React.useState([] as any)
   var inital_meta: { [key: string]: any } = {};
   var [metadata, setMetaData] = React.useState(inital_meta)
@@ -154,45 +155,54 @@ export default function Extension(){
 
   return (
   <>
-    <Box m='large' marginTop='80'>
-      <Box  display="flex" flexWrap='wrap'>
-      <Box m='medium' width={'35%'} marginLeft='100' marginRight='100'>
-        <Heading fontWeight='semiBold' marginBottom='10'>Welcome to your Looker Trial!</Heading>
-        <Paragraph fontSize='medium'> We've created this instance so you can better understand how Looker will help you use data to drive real business value. 
-          Here, you will be able to walk through a series of guided data experiences that we've developed based on common use cases we see from our customers. 
-        </Paragraph>
+    <Box m='large'>
+      <Box display="flex" justifyContent="center">
+        <Box maxWidth="700" textAlign="center">
+          <Heading fontWeight='semiBold' marginBottom='10'>Welcome to your Looker Trial!</Heading>
+          <Paragraph fontSize='medium'> We've created this instance so you can better understand how Looker will help you use data to drive real business value. 
+            Here, you will be able to walk through a series of guided data experiences that we've developed based on common use cases we see from our customers. 
+          </Paragraph>
+        </Box>      
       </Box>
-      <Box width="40%" marginTop="20" marginBottom="10" marginRight="10%" alignItems="center">
-        <Banner intent="info" fontSize="xsmall"> Click on a button to see what assets are in each section, then jump into a use case to get started!
-        </Banner>
-        <Space>
-        <Box display="flex" flexWrap='wrap' paddingLeft="10">
-          <Popover
-          content={
-          <PopoverContent p="large" width="360px">
-            <Text fontSize="small" textAlign="center">Start your Looker journey by a opening up a Dashboard, or going to the Board - which has all the Dashboards for the industry pinned for easy access</Text>
-          </PopoverContent>}>
-              {(onClick, ref, className) => (
-                  <ButtonOutline width="100%" color="neutral" iconBefore="Visualization" marginBottom="10" aria-haspopup="true" onClick={onClick} ref={ref} className={className}>Go to Dashboards</ButtonOutline>)}
-        </Popover>            
+      <Box display="flex" justifyContent="center" marginTop="30">
+        <Grid maxWidth="800" columns={isDeveloper ? 2 : 3}>
+          <FeatureCard
+            iconName="Visualization"
+            title="Go to Dashboards"
+            description="Start your Looker journey by a opening up a Dashboard, or going to the Board - which has all the Dashboards for the industry pinned for easy access"
+          ></FeatureCard>
+          <FeatureCard
+            iconName="Explore"
+            title="Start Exploring"
+            description="Ready to learn how to ask new question of the data? Jump into an Explore and follow along with the Q & A Packet to get familiar with exploring data in Looker."
+          ></FeatureCard>
+          <FeatureCard
+            iconName="Beaker"
+            title="Guided Walkthroughs"
+            description={
+              <Box display="flex" flexDirection="column">
+                <Text marginBottom="10" fontSize="small">You can use our interactive walkthroughs to learn how to use Looker. Download our partner's browser extension, and you're ready to go!</Text>
+                <ButtonTransparent>Setup</ButtonTransparent>
+              </Box>
+            }
+          ></FeatureCard>
+          {isDeveloper && 
+          <FeatureCard
+            iconName="Code"
+            title="Begin Developing"
+            description={
+              <Box display="flex" flexDirection="column">
+                <Text marginBottom="10" fontSize="small">Developing content in Looker starts with modeling your data in LookML. Use the ressources below to start learning.</Text>
+                <Box display="flex" justifyContent="center" flexDirection="row">
+                  <ButtonTransparent onClick={() =>  extensionSDK.openBrowserWindow('/projects/getting_started_with_lookml/','_blank')}>Learn LookML</ButtonTransparent>
+                  <ButtonTransparent onClick={() =>  extensionSDK.openBrowserWindow('/projects/lookml_from_scratch','_blank')}>Practice LookML</ButtonTransparent>
+                </Box>
+              </Box>
+            }
+          ></FeatureCard>
+          }
+        </Grid>        
       </Box>
-        <Box>
-        <Popover
-          content={
-          <PopoverContent p="large" width="360px">
-              <Paragraph fontSize="small" textAlign="center">Ready to learn how to ask new question of the data? Jump into an Explore and follow along with the Q & A Packet to get familiar with exploring data in Looker.</Paragraph>
-          </PopoverContent>}>
-              {(onClick, ref, className) => (
-                  <ButtonOutline width="100%" color="neutral" iconBefore="Explore" marginBottom="10" aria-haspopup="true" onClick={onClick} ref={ref} className={className}>Start Exploring</ButtonOutline>)}
-          </Popover>   
-          </Box>
-        <Box>
-          <DevelopButton developer={isDeveloper}></DevelopButton>
-        </Box>
-        </Space>
-      </Box>
-      </Box>
-      {/* <Heading marginTop='50'> Click on an experience below to get started 🤩</Heading> */}
       <Box m='large' display='flex' flexWrap='wrap'>
         {
           boardIds.map((item: any, i: number) => 
@@ -205,35 +215,28 @@ export default function Extension(){
 )
 }
 
-
-export function DevelopButton(props:any){
-  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const sdk = extensionContext.extensionSDK
-  var [show, setShow] = React.useState(false)
-
-  if(props.developer){
-    return(
-      <Menu>
-      <MenuDisclosure>
-        <ButtonOutline width="100%" color="neutral" iconBefore="Code" marginBottom="10" aria-haspopup="true">Begin Developing</ButtonOutline>
-      </MenuDisclosure>
-      <MenuList>
-        <MenuItem key={0} itemRole="button" onClick={() =>  sdk.openBrowserWindow('/projects/getting_started_with_lookml/','_blank')}>Learn LookML</MenuItem>
-        <MenuItem key={1} itemRole="button" onClick={() =>  sdk.openBrowserWindow('/projects/lookml_from_scratch','_blank')}>Practice LookML from Scratch</MenuItem>
-      </MenuList>
-    </Menu>
-    )
-  }
-  else{
-    return(
-      <Popover
-        content={
-        <PopoverContent p="large" width="360px">
-              <Paragraph fontSize="small" textAlign="center">Check out the additional resources menu for links to supporting material such as customer stories or recorded videos specific to the industry or use case</Paragraph>
-        </PopoverContent>}>
-            {(onClick, ref, className) => (
-                <ButtonOutline width="100%" color="neutral" iconBefore="Public" marginBottom="10" aria-haspopup="true" onClick={onClick} ref={ref} className={className}>Additional Resources</ButtonOutline>)}
-        </Popover>  
-    )
-  }
+export function FeatureCard(props:any) {
+  return(
+    <Card>
+      <CardContent>
+        <Heading
+          as="h4"
+          fontSize="xsmall"
+          textTransform="uppercase"
+          fontWeight="semiBold"
+          color="grey"
+          marginBottom="10"
+        >
+          <Box display="flex" >
+            <Icon marginRight="10" size="20" name={props.iconName}></Icon>
+            <Text fontSize="small" color="grey">{props.title}</Text>
+          </Box>
+          
+        </Heading>
+        <Text fontSize="small">
+          {props.description}
+        </Text>
+      </CardContent>
+    </Card>
+  )
 }
