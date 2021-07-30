@@ -38,7 +38,7 @@ import Experience from "./Experience";
 import ExperienceMenuButton from "./Experience";
 import styled from 'styled-components';
 import { promises } from 'fs'
-
+import { Explore, ChartArea, Beaker, IdeFileLookML } from '@looker/icons'
 
 export default function Extension(){
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
@@ -169,17 +169,17 @@ export default function Extension(){
       <Box display="flex" justifyContent="center" marginTop="30">
         <Grid maxWidth="800" columns={isDeveloper ? 2 : 3}>
           <FeatureCard
-            iconName="Visualization"
+            icon={<ChartArea />}
             title="Go to Dashboards"
             description="Start your Looker journey by a opening up a Dashboard, or going to the Board - which has all the Dashboards for the industry pinned for easy access"
           />
           <FeatureCard
-            iconName="Explore"
+            icon={<Explore />}
             title="Start Exploring"
             description="Ready to learn how to ask new question of the data? Jump into an Explore and follow along with the Q & A Packet to get familiar with exploring data in Looker."
           />
           <FeatureCard
-            iconName="Beaker"
+            icon={<Beaker />}
             title="Guided Walkthroughs"
             description={
               <Box display="flex" flexDirection="column">
@@ -190,7 +190,7 @@ export default function Extension(){
           />
           {isDeveloper &&
           <FeatureCard
-            iconName="Code"
+            icon={<IdeFileLookML />}
             title="Begin Developing"
             description={
               <Box display="flex" flexDirection="column">
@@ -230,7 +230,7 @@ export function FeatureCard(props:any) {
           marginBottom="10"
         >
           <Box display="flex" >
-            {/*<Icon marginRight="10" size="20" name={props.iconName}></Icon>*/}
+            <Icon marginRight="10" size="20" icon={props.icon}></Icon>
             <Text fontSize="small" color="grey">{props.title}</Text>
           </Box>
           
