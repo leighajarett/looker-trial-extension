@@ -23,7 +23,6 @@ export const usePrivacyConsent = () => {
       const json = await response.json()
 
       if (json && typeof json.accepted_privacy_policy !== 'undefined' && json.accepted_privacy_policy !== 'declined') {
-        console.log('teststst')
         setConsented(true)
       }
     }

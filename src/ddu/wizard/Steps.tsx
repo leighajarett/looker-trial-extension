@@ -16,8 +16,6 @@ import {
 } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import {useLookerRedirect} from './hooks/useLookerRedirect'
-import {useExtensionDetector} from './hooks/useExtensionDetector'
-import {usePrivacyConsent} from './hooks/usePrivacyConsent'
 import {useAutoLogin} from './hooks/useAutoLogin'
 import {useWizard} from './index'
 
@@ -31,16 +29,14 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
   const [checked, setChecked] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 
-  const detected = useExtensionDetector()
-  const isConsented = usePrivacyConsent()
   const redirect = useLookerRedirect()
   const autoLogin = useAutoLogin()
   const wizard = useWizard()
 
   React.useEffect(() => {
-    isConsented && setChecked(true)
-    isConsented && setCurrent(detected ? 2 : 1)
-  }, [isConsented])
+    wizard.consented && setChecked(true)
+    wizard.consented && setCurrent(wizard.detected ? 2 : 1)
+  }, [wizard.consented])
 
   const handleRedirect = () => {
     redirect('https://datadriven.university/privacy', 'blank')
@@ -54,7 +50,7 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
   }
 
   const next = () => {
-    if(current === 0 && !isConsented){
+    if(current === 0 && !wizard.consented){
       setLoading(true)
       autoLogin()
           .then(() => {
@@ -86,7 +82,7 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
           anytime be returning to this site.</Paragraph>
         <Paragraph>Check our <ButtonTransparent onClick={handleRedirect}>Privacy Policy</ButtonTransparent> to see what data we are collecting.</Paragraph>
         <Flex marginTop="25px">
-          <Checkbox disabled={isConsented} checked={checked} onChange={() => setChecked(!checked)} />
+          <Checkbox disabled={wizard.consented} checked={checked} onChange={() => setChecked(!checked)} />
           <Box marginLeft="5px">I agree to Privacy Policy</Box>
         </Flex>
       </Box>,
@@ -106,7 +102,7 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
     },
   ]
 
-  const nextButtonDisabled = (current === 0 && !checked) || (current === 1 && !detected) || loading
+  const nextButtonDisabled = (current === 0 && !checked) || (current === 1 && !wizard.detected) || loading
 
   return (
     <Grid columns={1}>
