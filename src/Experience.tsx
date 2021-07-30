@@ -153,6 +153,7 @@ export function Section(props:any) {
         <Space>
         <ExperienceButton buttonTitle={'Go to Dashboards'} buttonIcon={"Visualization"} menuItems={dashboardList}></ExperienceButton>
         <ExperienceButton buttonTitle={'Start Exploring'} buttonIcon={"Explore"} menuItems={experienceList}></ExperienceButton>
+        <ExperienceButton buttonTitle={'Walkthroughs'} buttonIcon={"Beaker"} menuItems={experienceList}></ExperienceButton>
         {/* {(props.recorded_demo || props.customer_story) ? <ExperienceButton buttonTitle={"Additional Resources"} buttonIcon={"Public"} menuItems={resourceList}></ExperienceButton>: <div></div>} */}
         </Space>
         </Box>
