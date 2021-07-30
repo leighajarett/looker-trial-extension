@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 
-const IFRAME_MESSAGE_ID = 'lrowwpi5gs9a55yjg0th40xagi9t82t5'
+const IFRAME_MESSAGE_ID = '3039ad0165c245819c14af404b519a5c'
 
 const useAllMessageListener = (handler: (event: any) => void) => {
   const messageHandler = useCallback(
