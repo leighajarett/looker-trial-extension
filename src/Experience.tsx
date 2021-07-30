@@ -179,7 +179,7 @@ export function ExperienceButton(props:any){
             </MenuList>
         }
     >
-        <ButtonOutline color="neutral"  size="small" iconBefore={props.buttonIcon}>{props.buttonTitle}</ButtonOutline>
+        <ButtonOutline color="neutral"  size="small">{props.buttonTitle}</ButtonOutline>
     </Menu>
   )
 }
