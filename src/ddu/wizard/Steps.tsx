@@ -75,21 +75,25 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
     {
       content: <Box margin="25px 0">
         <Heading textAlign="center" marginBottom="15px" as="h2">We value your privacy!</Heading>
-        <Paragraph>We and our partners use technology such as cookies on our site to
-          personalise content and analyse our traffic.</Paragraph>
-        <Paragraph>Click below to consent to the use of this technology across the
-          web. You can change your mind and change your consent choices at
-          anytime be returning to this site.</Paragraph>
-        <Paragraph>Check our <Link href='https://datadriven.university/privacy' onClick={handleRedirect}>Privacy Policy</Link> to see what data we are collecting.</Paragraph>
+        <Paragraph>
+          We partnered with Data Driven to provide the guided walkthrough experiences. 
+          They need your consent to use cookies and collect data so that your experience 
+          can be personalized. 
+          Click below to consent to the use of this technology across the
+          web. You can change your mind at anytime by returning to this site.</Paragraph>
+        <Paragraph marginTop="10">Check our <Link href='https://datadriven.university/privacy' onClick={handleRedirect}>Privacy Policy</Link> to see what data we are collecting.</Paragraph>
         <Flex marginTop="25px">
           <Checkbox disabled={wizard.consented} checked={checked} onChange={() => setChecked(!checked)} />
-          <Box marginLeft="5px">I agree to Privacy Policy</Box>
+          <Box marginLeft="5px">I agree to Data Driven Privacy Policy</Box>
         </Flex>
       </Box>,
     },
     {
       content: <Box textAlign="center" margin="25px 0">
-        <Heading marginBottom="15px" as="h2">To get the most out of DDU, install our extension!</Heading>
+        <Heading marginBottom="15px" as="h2">Install the Browser Extension</Heading>
+        <Paragraph>
+          In order to use the guided walkthroughs, you need to download the Data Driven University browser extension in the Chrome Browser.
+        </Paragraph>
         {!wizard.detected
             ? <Button size="large" onClick={downloadExtension}>
               Download
@@ -102,7 +106,13 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
     },
     {
       content: <Box textAlign="center" margin="25px 0">
-        <Heading marginBottom="15px" as="h1">Thank you!</Heading>
+        <Heading marginBottom="15px" as="h1">You're all set!</Heading>
+        <Paragraph>
+          Thanks for setting up Data Driven University. You can now use our guided walkthroughs to learn Looker!
+        </Paragraph>
+        <Flex justifyContent="center">
+            <Icon color="key" size="60" icon={<CheckCircle />} />
+        </Flex>
       </Box>,
     },
   ]
