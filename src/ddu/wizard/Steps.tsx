@@ -14,6 +14,7 @@ import {
   Checkbox, Spinner
 } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
+import { CheckCircle } from '@styled-icons/material-outlined/CheckCircle'
 import {useLookerRedirect} from './hooks/useLookerRedirect'
 import {useAutoLogin} from './hooks/useAutoLogin'
 import {useWizard} from './index'
@@ -89,9 +90,14 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
     {
       content: <Box textAlign="center" margin="25px 0">
         <Heading marginBottom="15px" as="h2">To get the most out of DDU, install our extension!</Heading>
-        <Button size="large" onClick={downloadExtension}>
-          Download
-        </Button>
+        {!wizard.detected
+            ? <Button size="large" onClick={downloadExtension}>
+              Download
+            </Button>
+            : <Flex justifyContent="center">
+              <Icon color="key" size="60" icon={<CheckCircle />} />
+            </Flex>
+        }
       </Box>,
     },
     {
@@ -149,7 +155,7 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
         )}
         {current < steps.length - 1 && (
           <FlexItem>
-            <Button disabled={nextButtonDisabled} iconBefore={loading && <Spinner color="white" size={25} />} minWidth="110px" onClick={() => next()}>
+            <Button disabled={nextButtonDisabled} iconBefore={loading ? <Spinner marginRight="5px" color="white" size={25} /> : undefined} minWidth="110px" onClick={() => next()}>
               Next
             </Button>
           </FlexItem>
