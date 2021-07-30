@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   ButtonOutline,
-  ButtonTransparent,
   Icon,
   Heading,
   Paragraph,
@@ -80,7 +79,7 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
         <Paragraph>Click below to consent to the use of this technology across the
           web. You can change your mind and change your consent choices at
           anytime be returning to this site.</Paragraph>
-        <Paragraph>Check our <ButtonTransparent onClick={handleRedirect}>Privacy Policy</ButtonTransparent> to see what data we are collecting.</Paragraph>
+        <Paragraph>Check our <Link href='https://datadriven.university/privacy' onClick={handleRedirect}>Privacy Policy</Link> to see what data we are collecting.</Paragraph>
         <Flex marginTop="25px">
           <Checkbox disabled={wizard.consented} checked={checked} onChange={() => setChecked(!checked)} />
           <Box marginLeft="5px">I agree to Privacy Policy</Box>
