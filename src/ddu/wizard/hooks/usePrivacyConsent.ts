@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 
-const ACADEMY_SERVER = 'https://staging-datadriven.university'
-// const ACADEMY_SERVER = 'https://localhost:8443'
+const ACADEMY_SERVER = 'https://datadriven.university'
 
 export const usePrivacyConsent = () => {
   const [isConsented, setConsented] = useState(false)
