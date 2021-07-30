@@ -15,7 +15,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@looker/components": "0.7.31",
+    "@looker/components": "^2.0.1",
     "@looker/extension-sdk": "^0.7.2",
     "@looker/extension-sdk-react": "^0.5.1",
     "@looker/sdk": "^0.3.0-beta.1",
@@ -35,6 +35,9 @@
     "react-router-dom": "^5.2.0",
     "react-youtube": "^7.11.2",
     "styled-components": "^5.1.0",
+    "@styled-icons/material": "10.28.0",
+    "@styled-icons/material-outlined": "10.28.0",
+    "@styled-icons/material-rounded": "10.28.0",
     "styled-system": "^5.1.5",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",

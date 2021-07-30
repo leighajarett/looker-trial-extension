@@ -23,13 +23,14 @@
  */
 
 import React, { useContext, Component, useEffect } from "react"
-import {Icon, Banner, Box, Heading, Paragraph, Popover, PopoverContent, Text, Grid, ButtonOutline, Space, Menu, MenuDisclosure, MenuList, MenuItem, Card, CardContent, ButtonTransparent} from '@looker/components'
+import {Icon, Box, Heading, Paragraph, Popover, PopoverContent, Text, Grid, ButtonOutline, Space, Menu, MenuList, MenuItem, Card, CardContent, ButtonTransparent} from '@looker/components'
 import {
   ExtensionContext,
   ExtensionContextData,
   getCore31SDK,
   getCore40SDK
 } from "@looker/extension-sdk-react"
+import { useWizard } from './DDUWizard'
 import {ILook} from '@looker/sdk'
 import {Switch, Route, RouteComponentProps, withRouter, MemoryRouter} from 'react-router-dom'
 import { hot } from "react-hot-loader/root"
@@ -48,6 +49,7 @@ export default function Extension(){
   var [metadata, setMetaData] = React.useState(inital_meta)
   var [isDeveloper, setDeveloper] = React.useState(false as boolean)
   var [instance, setInstance] = React.useState('')
+  const wizard = useWizard()
   
 
   const updateBoards = (look_id: number, dimension_name: string) => {
@@ -170,23 +172,23 @@ export default function Extension(){
             iconName="Visualization"
             title="Go to Dashboards"
             description="Start your Looker journey by a opening up a Dashboard, or going to the Board - which has all the Dashboards for the industry pinned for easy access"
-          ></FeatureCard>
+          />
           <FeatureCard
             iconName="Explore"
             title="Start Exploring"
             description="Ready to learn how to ask new question of the data? Jump into an Explore and follow along with the Q & A Packet to get familiar with exploring data in Looker."
-          ></FeatureCard>
+          />
           <FeatureCard
             iconName="Beaker"
             title="Guided Walkthroughs"
             description={
               <Box display="flex" flexDirection="column">
                 <Text marginBottom="10" fontSize="small">You can use our interactive walkthroughs to learn how to use Looker. Download our partner's browser extension, and you're ready to go!</Text>
-                <ButtonTransparent>Setup</ButtonTransparent>
+                <ButtonTransparent onClick={() => wizard.open()}>Setup</ButtonTransparent>
               </Box>
             }
-          ></FeatureCard>
-          {isDeveloper && 
+          />
+          {isDeveloper &&
           <FeatureCard
             iconName="Code"
             title="Begin Developing"
@@ -199,14 +201,14 @@ export default function Extension(){
                 </Box>
               </Box>
             }
-          ></FeatureCard>
+          />
           }
         </Grid>        
       </Box>
       <Box m='large' display='flex' flexWrap='wrap'>
         {
           boardIds.map((item: any, i: number) => 
-            (<Experience key={i} board_id={item} board_metadata={metadata}></Experience>)
+            (<Experience key={i} board_id={item} board_metadata={metadata}/>)
           )
         }
       </Box>
@@ -228,7 +230,7 @@ export function FeatureCard(props:any) {
           marginBottom="10"
         >
           <Box display="flex" >
-            <Icon marginRight="10" size="20" name={props.iconName}></Icon>
+            {/*<Icon marginRight="10" size="20" name={props.iconName}></Icon>*/}
             <Text fontSize="small" color="grey">{props.title}</Text>
           </Box>
           

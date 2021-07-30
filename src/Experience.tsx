@@ -1,8 +1,8 @@
 import React,  { useContext, useEffect } from "react"
-import { Select, theme, Link, Icon, ActionList, ActionListItemColumn, ActionListItem, Menu, MenuDisclosure, MenuList, MenuItem, ButtonOutline, Space, ButtonItem} from "@looker/components";
+import { Select, theme, Link, Icon, Menu, MenuList, MenuItem, ButtonOutline, Space, ButtonItem} from "@looker/components";
 import styled, { ThemeProvider } from 'styled-components';
 import Modal from 'react-bootstrap/Modal';
-import {Banner, Box, Heading, Paragraph, Button} from '@looker/components';
+import {Box, Heading, Paragraph, Button} from '@looker/components';
 import {
     ExtensionContext,
     ExtensionContextData,
@@ -167,19 +167,19 @@ export function ExperienceButton(props:any){
   // <iframe src="https://docs.google.com/document/d/e/2PACX-1vRQ45rPpvA4Oudid68SzISQ7tjTvMDg6HsaVcKQSCVPdmjcSNdXsgKF68FEdp8EpnuxLg7MgwemMX2t/pub?embedded=true"></iframe>
 
   return(
-    <Menu>
-      <MenuDisclosure>
-        <ButtonOutline color="neutral"  size="small" iconBefore={props.buttonIcon}>{props.buttonTitle}</ButtonOutline>
-      </MenuDisclosure>
-      <MenuList>
-        {
-          props.menuItems.map((item: any, i: number) => 
-            (
-            <ExperienceMenuButton key={i} name={item.name} link={item.link}></ExperienceMenuButton>
-            ))
-            // <MenuItem key={item.name} itemRole="button" onClick={() => sdk.openBrowserWindow(item.link,'_blank')}>{item.name}</MenuItem>)
+    <Menu
+        content={
+            <MenuList>
+                {props.menuItems.map((item: any, i: number) =>
+                        (
+                            <ExperienceMenuButton key={i} name={item.name} link={item.link}/>
+                        ))
+                    // <MenuItem key={item.name} itemRole="button" onClick={() => sdk.openBrowserWindow(item.link,'_blank')}>{item.name}</MenuItem>)
+                }
+            </MenuList>
         }
-      </MenuList>
+    >
+        <ButtonOutline color="neutral"  size="small" iconBefore={props.buttonIcon}>{props.buttonTitle}</ButtonOutline>
     </Menu>
   )
 }

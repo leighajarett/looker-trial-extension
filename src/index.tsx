@@ -25,9 +25,10 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import {ExtensionProvider} from '@looker/extension-sdk-react'
-import {GlobalStyle, theme, Spinner, Flex} from '@looker/components'
-import {ThemeProvider} from 'styled-components'
+import {Spinner, Flex, ComponentsProvider} from '@looker/components'
+import DDUWizardProvider from './DDUWizard'
 import Extension from "./Extension"
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 window.addEventListener('DOMContentLoaded', async (event) => {
@@ -43,12 +44,11 @@ window.addEventListener('DOMContentLoaded', async (event) => {
   ReactDOM.render(
     // ExtensionProvider provides subcomponents access to the Looker Extension SDK
     <ExtensionProvider loadingComponent={loading} requiredLookerVersion='>=7.0.0'>
-      <ThemeProvider theme={theme}>
-        <>
-          <GlobalStyle />
-          <Extension/>
-        </>
-      </ThemeProvider>
+        <ComponentsProvider>
+            <DDUWizardProvider>
+                <Extension/>
+            </DDUWizardProvider>
+        </ComponentsProvider>
     </ExtensionProvider>,
     root
   )
