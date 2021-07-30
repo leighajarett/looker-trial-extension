@@ -12,7 +12,7 @@ import {
   Heading,
   Paragraph,
   Link,
-  Checkbox
+  Checkbox, Spinner
 } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import {useLookerRedirect} from './hooks/useLookerRedirect'
@@ -150,7 +150,7 @@ const Steps: React.FC<StepsProps> = ({ children, close, isOpen }) => {
         )}
         {current < steps.length - 1 && (
           <FlexItem>
-            <Button disabled={nextButtonDisabled} minWidth="110px" onClick={() => next()}>
+            <Button disabled={nextButtonDisabled} iconBefore={loading && <Spinner color="white" size={25} />} minWidth="110px" onClick={() => next()}>
               Next
             </Button>
           </FlexItem>
