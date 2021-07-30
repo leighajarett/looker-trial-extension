@@ -38,6 +38,8 @@ import Experience from "./Experience";
 import ExperienceMenuButton from "./Experience";
 import styled from 'styled-components';
 import { promises } from 'fs'
+import usePrivacyConsent from "./ddu/usePrivacyConsent";
+import useAutoLogin from "./ddu/useAutoLogin";
 
 
 export default function Extension(){
@@ -50,7 +52,17 @@ export default function Extension(){
   var [isDeveloper, setDeveloper] = React.useState(false as boolean)
   var [instance, setInstance] = React.useState('')
   const wizard = useWizard()
-  
+
+  // TODO: this is an example, please remove
+  const isConsented = usePrivacyConsent()
+  const autoLogin = useAutoLogin()
+
+  useEffect(() => {
+    autoLogin().catch(e => console.error(e))
+  },[])
+
+  console.log('isConsented', isConsented)
+  //-------------------------------------------
 
   const updateBoards = (look_id: number, dimension_name: string) => {
     // update the state with the list of boards from our demo board list
